@@ -62,21 +62,30 @@ export class NotificacionesService {
           d.id AS documento_id,
           d.tipo,
           d.fecha_vencimiento,
-          d.dias_anticipacion,
+          CASE
+            WHEN DATEDIFF(d.fecha_vencimiento, CURDATE()) = 1 THEN 1
+            ELSE d.dias_anticipacion
+          END AS dias_anticipacion,
           u.nombre,
           u.correo,
           DATEDIFF(d.fecha_vencimiento, CURDATE()) AS dias_restantes
         FROM documentos d
         INNER JOIN usuarios u ON u.id = d.usuario_id
-        WHERE DATEDIFF(d.fecha_vencimiento, CURDATE()) = d.dias_anticipacion
-          AND NOT EXISTS (
-            SELECT 1
-            FROM recordatorios_enviados r
-            WHERE r.documento_id = d.id
-              AND r.fecha_vencimiento = d.fecha_vencimiento
-              AND r.dias_anticipacion = d.dias_anticipacion
-              AND r.estado = 'ENVIADO'
-          )
+        WHERE (
+          DATEDIFF(d.fecha_vencimiento, CURDATE()) = d.dias_anticipacion
+          OR DATEDIFF(d.fecha_vencimiento, CURDATE()) = 1
+        )
+        AND NOT EXISTS (
+          SELECT 1
+          FROM recordatorios_enviados r
+          WHERE r.documento_id = d.id
+            AND r.fecha_vencimiento = d.fecha_vencimiento
+            AND r.dias_anticipacion = CASE
+              WHEN DATEDIFF(d.fecha_vencimiento, CURDATE()) = 1 THEN 1
+              ELSE d.dias_anticipacion
+            END
+            AND r.estado = 'ENVIADO'
+        )
       `);
 
       const documentos = filas as DocumentoPorVencer[];
@@ -106,7 +115,6 @@ export class NotificacionesService {
     await this.enviarRecordatorio(documento);
   }
 
-
   private async enviarRecordatorio(documento: DocumentoPorVencer) {
     const usuarioCorreo = this.configService.get<string>('MAIL_USER');
     const usuarioPassword = this.configService.get<string>('MAIL_PASSWORD');
@@ -126,7 +134,7 @@ export class NotificacionesService {
       const [resultado] = await conexion.execute(
         `INSERT IGNORE INTO recordatorios_enviados
           (documento_id, fecha_vencimiento, dias_anticipacion, estado)
-         VALUES (?, ?, ?, 'PENDIENTE')`,
+        VALUES (?, ?, ?, 'PENDIENTE')`,
         [
           documento.documento_id,
           fecha,
@@ -167,6 +175,14 @@ export class NotificacionesService {
         textoEnlace = 'Consultar portal oficial del DUI';
       }
 
+      // Aviso obligatorio y automático un día antes del vencimiento.
+      // Este bloque va después del tipo de documento para que no se sobrescriba.
+      if (documento.dias_restantes === 1) {
+        asunto = `TrámiteSV | Mañana vence tu ${documento.tipo}`;
+        titulo = `¡Mañana vence tu ${documento.tipo}!`;
+        descripcion =
+          `Te recordamos que mañana vence tu ${documento.tipo}. Te recomendamos realizar el trámite de renovación lo antes posible.`;
+      }
 
       const html = `
       <!DOCTYPE html>
@@ -180,13 +196,13 @@ export class NotificacionesService {
           <div style="display:none;max-height:0;overflow:hidden;">
             Recuerda revisar la fecha de vencimiento de tu documento.
           </div>
-    
+
           <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
             <tr>
               <td align="center">
                 <table role="presentation" width="100%" cellspacing="0" cellpadding="0"
                   style="max-width:600px;background-color:#ffffff;border-radius:12px;overflow:hidden;">
-    
+
                   <tr>
                     <td style="background-color:#123b32;padding:28px;text-align:center;">
                       <h1 style="margin:0;color:#ffffff;font-size:28px;">TrámiteSV</h1>
@@ -195,21 +211,21 @@ export class NotificacionesService {
                       </p>
                     </td>
                   </tr>
-    
+
                   <tr>
                     <td style="padding:30px;">
                       <h2 style="margin:0 0 14px;color:#123b32;font-size:23px;">
                         ${titulo}
                       </h2>
-    
+
                       <p style="font-size:15px;line-height:1.7;margin:0 0 20px;">
                         Hola ${documento.nombre},
                       </p>
-    
+
                       <p style="font-size:15px;line-height:1.7;margin:0 0 22px;">
                         ${descripcion}
                       </p>
-    
+
                       <table role="presentation" width="100%" cellspacing="0" cellpadding="0"
                         style="background-color:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;">
                         <tr>
@@ -218,12 +234,12 @@ export class NotificacionesService {
                             <p style="margin:0 0 18px;color:#123b32;font-size:18px;font-weight:bold;">
                               ${documento.tipo}
                             </p>
-    
+
                             <p style="margin:0 0 6px;color:#64748b;font-size:12px;">FECHA DE VENCIMIENTO</p>
                             <p style="margin:0 0 18px;color:#1e293b;font-size:16px;font-weight:bold;">
                               ${fecha}
                             </p>
-    
+
                             <p style="margin:0 0 6px;color:#64748b;font-size:12px;">DÍAS RESTANTES</p>
                             <p style="margin:0;color:#166534;font-size:24px;font-weight:bold;">
                               ${documento.dias_restantes} días
@@ -231,11 +247,11 @@ export class NotificacionesService {
                           </td>
                         </tr>
                       </table>
-    
+
                       <p style="font-size:14px;line-height:1.7;margin:24px 0;">
                         Para obtener información actualizada sobre tu trámite, visita el portal oficial.
                       </p>
-    
+
                       <table role="presentation" cellspacing="0" cellpadding="0" style="margin:0 auto 20px;">
                         <tr>
                           <td align="center" style="background-color:#166534;border-radius:6px;">
@@ -246,13 +262,13 @@ export class NotificacionesService {
                           </td>
                         </tr>
                       </table>
-    
+
                       <p style="font-size:12px;line-height:1.6;color:#64748b;margin:24px 0 0;">
                         Verifica los requisitos y las condiciones directamente con la institución oficial, ya que pueden cambiar.
                       </p>
                     </td>
                   </tr>
-    
+
                   <tr>
                     <td style="background-color:#f8fafc;border-top:1px solid #e2e8f0;padding:20px 25px;text-align:center;">
                       <p style="margin:0;color:#475569;font-size:13px;font-weight:bold;">
@@ -263,15 +279,14 @@ export class NotificacionesService {
                       </p>
                     </td>
                   </tr>
-    
+
                 </table>
               </td>
             </tr>
           </table>
         </body>
       </html>
-    `;
-    
+      `;
 
       const texto = [
         `Hola ${documento.nombre},`,
@@ -297,10 +312,10 @@ export class NotificacionesService {
 
       await conexion.execute(
         `UPDATE recordatorios_enviados
-         SET estado = 'ENVIADO'
-         WHERE documento_id = ?
-           AND fecha_vencimiento = ?
-           AND dias_anticipacion = ?`,
+        SET estado = 'ENVIADO'
+        WHERE documento_id = ?
+          AND fecha_vencimiento = ?
+          AND dias_anticipacion = ?`,
         [
           documento.documento_id,
           fecha,
@@ -319,10 +334,10 @@ export class NotificacionesService {
 
       await conexion.execute(
         `DELETE FROM recordatorios_enviados
-         WHERE documento_id = ?
-           AND fecha_vencimiento = ?
-           AND dias_anticipacion = ?
-           AND estado = 'PENDIENTE'`,
+        WHERE documento_id = ?
+          AND fecha_vencimiento = ?
+          AND dias_anticipacion = ?
+          AND estado = 'PENDIENTE'`,
         [
           documento.documento_id,
           this.fechaSQL(documento.fecha_vencimiento),
@@ -333,7 +348,6 @@ export class NotificacionesService {
       conexion.release();
     }
   }
-
 
   private fechaSQL(fecha: string | Date): string {
     if (typeof fecha === 'string') {
