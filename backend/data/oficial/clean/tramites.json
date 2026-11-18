@@ -1,0 +1,165 @@
+{
+  "version": "1.0",
+  "fecha_verificacion": "2026-11-14",
+  "responsable": "Carlos",
+  "aviso": "Informacion de apoyo. Requisitos, costos y horarios pueden cambiar; confirmar siempre en el portal oficial antes de realizar el tramite.",
+  "tramites": [
+    {
+      "id": "dui",
+      "documento": "DUI",
+      "nombre_completo": "Documento Unico de Identidad",
+      "institucion": "Registro Nacional de las Personas Naturales (RNPN)",
+      "enlaces_oficiales": [
+        { "titulo": "Portal DUI (renovacion/reposicion en linea y citas)", "url": "https://dui.sv/inicio/", "tipo": "oficial" },
+        { "titulo": "Pago en linea del DUI", "url": "https://pago.dui.gob.sv", "tipo": "oficial" },
+        { "titulo": "DUI para salvadorenos en Estados Unidos", "url": "https://www.dui.sv/exterior", "tipo": "oficial" }
+      ],
+      "costos": [
+        { "concepto": "Primera vez en El Salvador", "monto_usd": 0, "nota": "Emision gratuita" },
+        { "concepto": "Renovacion, reposicion o modificacion en El Salvador", "monto_usd": 10.31, "nota": "Se paga en banco o en linea; se presenta el recibo en el DUICentro" },
+        { "concepto": "Renovacion, reposicion o modificacion en el exterior (consulado)", "monto_usd": 35, "nota": "Se paga el dia de la cita consular" },
+        { "concepto": "DUI Express (EE. UU., con entrega a domicilio)", "monto_usd": 55, "nota": "35 por el documento + 20 por entrega" }
+      ],
+      "requisitos": {
+        "primera_vez": ["Partida de nacimiento original"],
+        "renovacion": ["No se requiere documentacion adicional salvo que se modifiquen datos", "Recibo o comprobante de pago de 10.31"],
+        "reposicion": ["Recibo o comprobante de pago de 10.31", "Un delegado del RNPN puede pedir documentacion adicional"],
+        "modificacion_de_datos": ["Documentos que respalden el cambio solicitado"]
+      },
+      "instrucciones": [
+        "Opcion en linea: entrar a dui.sv, validar identidad y pagar en linea (disponible para residentes en El Salvador y EE. UU.).",
+        "Opcion presencial: pagar 10.31 en banco o en linea y presentar el comprobante en un DUICentro.",
+        "Actualizar la profesion solo se hace de forma presencial en un DUICentro.",
+        "Tiempos aproximados: renovacion o reposicion 10 a 15 minutos; primera vez 30 a 40 minutos."
+      ],
+      "notas_importantes": [
+        "Renovacion gratuita por proceso electoral: segun elsalvador.com, aplica a DUI con vencimiento entre el 29/11/2026 y el 28/02/2027. Una nota de Diario El Mundo dice que el 28/11/2026 es el ultimo dia para el tramite gratuito y que si el DUI vence antes del 29/11/2026 cuesta 10.31. Las dos notas no coinciden del todo: CONFIRMAR la regla exacta en dui.sv o con el RNPN antes de mostrarla en la app."
+      ],
+      "fuentes": [
+        { "titulo": "Renovacion del DUI en linea: precio y datos (elsalvador.com)", "url": "https://www.elsalvador.com/?p=1283767", "tipo": "prensa", "cita_a": "RNPN" },
+        { "titulo": "Requisitos segun tipo de tramite (elsalvador.com)", "url": "https://www.elsalvador.com/?p=1264195", "tipo": "prensa", "cita_a": "RNPN" },
+        { "titulo": "Renovacion sin requisitos adicionales y tiempos (elsalvador.com)", "url": "https://www.elsalvador.com/?p=1249787", "tipo": "prensa", "cita_a": "RNPN" },
+        { "titulo": "Renovacion gratuita del DUI en linea (elsalvador.com)", "url": "https://www.elsalvador.com/?p=1286666", "tipo": "prensa", "cita_a": "RNPN" },
+        { "titulo": "RNPN habilita tramite gratuito del DUI (Diario El Mundo)", "url": "https://diario.elmundo.sv/politica/rnpn-habilita-tramite-gratuito-del-dui-y-llama-a-realizarlo-antes-del-28-de-noviembre", "tipo": "prensa", "cita_a": "RNPN" },
+        { "titulo": "DUI en el exterior: costo 35 (elsalvador.com)", "url": "https://www.elsalvador.com/?p=1274467", "tipo": "prensa", "cita_a": "Cancilleria / RNPN" }
+      ],
+      "estado_verificacion": "Datos tomados de prensa que cita al RNPN. Falta contrastar con dui.sv directamente."
+    },
+    {
+      "id": "pasaporte",
+      "documento": "Pasaporte",
+      "nombre_completo": "Pasaporte salvadoreno",
+      "institucion": "Direccion General de Migracion y Extranjeria (DGME)",
+      "enlaces_oficiales": [
+        { "titulo": "Ficha de servicio DGME: pasaporte ordinario, primera vez (Portal de Transparencia)", "url": "https://transparencia.gob.sv/institutions/dgme/services/170.pdf", "tipo": "oficial" },
+        { "titulo": "Ficha de servicio DGME: pasaporte con DUI, pasaporte vencido y pago de 25 (Portal de Transparencia)", "url": "https://www.transparencia.gob.sv/institutions/dgme/services/171.pdf", "tipo": "oficial" },
+        { "titulo": "Ficha de servicio DGME: revalidacion de pasaporte mayor de edad (Portal de Transparencia)", "url": "https://www.transparencia.gob.sv/institutions/dgme/services/176.pdf", "tipo": "oficial" }
+      ],
+      "enlace_portal_en_linea": null,
+      "nota_enlace": "La plataforma Pasaporte en Linea existe (lanzada en diciembre de 2023), pero no se verifico su URL oficial. Pendiente.",
+      "costos": [
+        { "concepto": "Primera emision, renovacion o reposicion en El Salvador", "monto_usd": 25, "nota": "Pago en la colecturia de la sucursal, en efectivo o tarjeta" },
+        { "concepto": "Segunda perdida consecutiva", "monto_usd": 100, "nota": "75 de penalizacion + 25 del pasaporte" },
+        { "concepto": "Renovacion expres en el aeropuerto", "monto_usd": 25, "nota": "Solo mayores de edad con DUI vigente; para casos de emergencia" },
+        { "concepto": "Entrega a domicilio (tramite en linea)", "monto_usd": null, "nota": "Costo adicional, monto no verificado" },
+        { "concepto": "En el exterior (consulados)", "monto_usd": null, "nota": "Segun prensa: 40 en Centroamerica y 60 en el resto del mundo; ademas declaracion jurada de 20 si es reposicion. Sin verificar en fuente oficial." }
+      ],
+      "requisitos": {
+        "primera_vez_adultos": ["DUI original, vigente y en buen estado", "Pago de 25"],
+        "primera_vez_menores": ["Partida de nacimiento original", "Ambos padres con DUI vigente (si uno no puede, autorizacion notarial o consular)", "Pago de 25"],
+        "renovacion_adultos": ["Pasaporte vencido o por vencer", "DUI original, vigente y en buen estado", "Pago de 25"],
+        "renovacion_menores": ["Pasaporte vencido o por vencer", "Partida de nacimiento solo si hubo cambio de datos", "Presencia de ambos padres con DUI vigente", "Pago de 25"],
+        "reposicion_por_perdida_o_robo": ["DUI original, vigente y en buen estado", "Declaracion jurada llenada en la sucursal", "Pago de 25"]
+      },
+      "instrucciones": [
+        "Se atiende por orden de llegada, sin cita previa, en las sucursales de Migracion.",
+        "Tiempo estimado: unos 20 minutos, puede variar segun la demanda.",
+        "En linea: el pasaporte se puede retirar en una sucursal o solicitar entrega a domicilio con costo adicional (solo mayores de 18 y dentro del pais, segun el lanzamiento de la plataforma).",
+        "Telefono de orientacion de Migracion: 2535-6212."
+      ],
+      "notas_importantes": [
+        "El pago de 25 se hace unicamente en las colecturias dentro de las sucursales (segun elsalvador.com, dic. 2025)."
+      ],
+      "fuentes": [
+        { "titulo": "Fichas de servicio DGME - Portal de Transparencia", "url": "https://transparencia.gob.sv/institutions/dgme/services/170.pdf", "tipo": "oficial" },
+        { "titulo": "Ficha DGME servicio 171", "url": "https://www.transparencia.gob.sv/institutions/dgme/services/171.pdf", "tipo": "oficial" },
+        { "titulo": "Ficha DGME servicio 176 (revalidacion)", "url": "https://www.transparencia.gob.sv/institutions/dgme/services/176.pdf", "tipo": "oficial" },
+        { "titulo": "Asi podes sacar tu pasaporte en El Salvador (elsalvador.com, 11/12/2025)", "url": "https://www.elsalvador.com/noticias/nacional/pasaporte-tramite/1254452/2025/", "tipo": "prensa", "cita_a": "DGME" },
+        { "titulo": "Ventanilla expres en el aeropuerto (Diario El Mundo)", "url": "https://diario.elmundo.sv/politica/habilitan-ventanilla-de-renovacion-expres-de-pasaportes-en-el-aeropuerto-internacional-de-el-salvador", "tipo": "prensa", "cita_a": "DGME" },
+        { "titulo": "Plataforma Pasaporte en Linea (Diario El Mundo)", "url": "https://diario.elmundo.sv/nacionales/lanzan-plataforma-para-renovar-el-pasaporte-en-linea-en-el-salvador", "tipo": "prensa", "cita_a": "DGME" }
+      ],
+      "estado_verificacion": "Costo de 25 y requisitos de adultos confirmados en fichas oficiales de transparencia y en prensa. Falta URL del portal en linea y costos en el exterior."
+    },
+    {
+      "id": "licencia",
+      "documento": "Licencia de conducir",
+      "nombre_completo": "Licencia de conducir",
+      "institucion": "Viceministerio de Transporte (VMT) / SERTRACEN",
+      "enlaces_oficiales": [
+        { "titulo": "SERTRACEN - tramites en linea (refrenda de licencia, tarjeta, esquelas)", "url": "https://www.sertracen.com.sv/", "tipo": "oficial" },
+        { "titulo": "SERTRACEN - portal web", "url": "https://portal.sertracen.com.sv/portalweb/", "tipo": "oficial" }
+      ],
+      "costos": [
+        { "concepto": "Licencia (emision, renovacion o reposicion) en El Salvador", "monto_usd": 52.82, "nota": "Segun notas recientes de prensa. Una nota anterior hablaba de 49.43; confirmar en SERTRACEN." },
+        { "concepto": "Examen visual (agudeza visual)", "monto_usd": 3.39, "nota": "Se realiza en SERTRACEN" },
+        { "concepto": "Homologacion de licencia extranjera", "monto_usd": 57.82, "nota": "Emite licencia clase particular" },
+        { "concepto": "Entrega a domicilio", "monto_usd": null, "nota": "Costo adicional, monto no verificado" }
+      ],
+      "requisitos": {
+        "renovacion": ["Licencia anterior", "DUI vigente y original", "Aprobar el examen visual en SERTRACEN", "No tener esquelas (multas) pendientes"],
+        "reposicion_por_robo_o_extravio": ["DUI vigente y original", "Aprobar el examen visual", "Si se perdio el permiso temporal: declaracion jurada en una sucursal"],
+        "primera_vez": ["Proceso regulado por VMT y SERTRACEN", "Detalle de requisitos y escuelas examinadoras: pendiente de verificar"]
+      },
+      "instrucciones": [
+        "En linea: entrar a sertracen.com.sv, elegir Licencia de Conducir, luego Refrenda de Licencia, iniciar el proceso y escoger donde retirar la licencia o pedirla a domicilio con costo adicional.",
+        "Presencial: sucursales de SERTRACEN o kioscos de autogestion (renovacion en unos cinco minutos).",
+        "Tambien se puede renovar en consulados de EE. UU. y Europa (por la plataforma de SERTRACEN)."
+      ],
+      "notas_importantes": [
+        "Para cualquier tramite de licencia no debe haber esquelas pendientes de pago.",
+        "El tramite es personal; no se puede delegar a terceros (segun elsalvador.com)."
+      ],
+      "fuentes": [
+        { "titulo": "Reposicion de licencia por robo o extravio (elsalvador.com)", "url": "https://www.elsalvador.com/?p=1292387", "tipo": "prensa", "cita_a": "SERTRACEN / VMT" },
+        { "titulo": "Renovar licencia, tarjeta y pagar multas desde casa (elsalvador.com)", "url": "https://www.elsalvador.com/?p=1272936", "tipo": "prensa", "cita_a": "VMT" },
+        { "titulo": "Licencia en consulados, costo 52.82 (centroamerica360)", "url": "https://www.centroamerica360.com/region/salvadorenos-en-europa-y-eeuu-podran-renovar-sus-licencias-de-conducir-a-traves-de-sus-consulados", "tipo": "prensa", "cita_a": "VMT" },
+        { "titulo": "Homologacion de licencia extranjera (elsalvador.com)", "url": "https://www.elsalvador.com/?p=1276364", "tipo": "prensa", "cita_a": "SERTRACEN" },
+        { "titulo": "Licencia por primera vez (elsalvador.com)", "url": "https://www.elsalvador.com/?p=1240848", "tipo": "prensa", "cita_a": "VMT" }
+      ],
+      "estado_verificacion": "Costo con discrepancia entre notas de prensa (52.82 vs 49.43). Falta contrastar con sertracen.com.sv."
+    },
+    {
+      "id": "tarjeta_circulacion",
+      "documento": "Tarjeta de circulacion",
+      "nombre_completo": "Tarjeta de circulacion (refrenda anual)",
+      "institucion": "Viceministerio de Transporte (VMT) / SERTRACEN",
+      "enlaces_oficiales": [
+        { "titulo": "SERTRACEN - refrenda de tarjeta de circulacion en linea", "url": "https://www.sertracen.com.sv/", "tipo": "oficial" },
+        { "titulo": "SERTRACEN - portal web", "url": "https://portal.sertracen.com.sv/portalweb/", "tipo": "oficial" }
+      ],
+      "costos": [
+        { "concepto": "Refrenda anual de vehiculo particular", "monto_usd": null, "nota": "NO VERIFICADO. No se encontro el monto en una fuente confiable. No mostrar cifra hasta confirmarla en SERTRACEN." }
+      ],
+      "requisitos": {
+        "refrenda": ["Tarjeta de circulacion original", "DUI original vigente", "Estar solvente de esquelas (multas)"],
+        "otros_mencionados_por_prensa": ["Seguro vigente (la nota lo cita como requisito general de la refrenda)"]
+      },
+      "instrucciones": [
+        "La refrenda es anual y obligatoria; no hacerla a tiempo puede generar sanciones economicas por cada ano vencido.",
+        "En linea: sertracen.com.sv, opcion Refrenda de tarjeta de circulacion, iniciar, aceptar terminos, ingresar numero de placa y numero de tarjeta; luego retiro en oficina o entrega a domicilio.",
+        "En kiosco: elegir Refrenda, insertar la tarjeta actual, DUI original, verificacion biometrica, revisar el monto, pagar con tarjeta y retirar la nueva tarjeta.",
+        "Kioscos: Plaza Mundo Apopa (L-V 8:00-17:00, sab 8:00-12:00); Las Cascadas, Metrocentro y Tutunichapa (L-V 8:00-16:00, sab 8:00-12:00)."
+      ],
+      "notas_importantes": [
+        "Desde el 5 de octubre de 2026 las volquetas deben pasar revision tecnica vehicular antes de renovar la tarjeta (informacion del VMT). Aplica a volquetas, no a vehiculos particulares.",
+        "Circular sin tarjeta vigente puede causar infracciones y decomiso de la unidad."
+      ],
+      "fuentes": [
+        { "titulo": "Pasos para refrendar en kioscos (elsalvador.com, 28/04/2026)", "url": "https://www.elsalvador.com/noticias/nacional/refrenda-tarjeta-circulacion-kioscos-sertracen/1271841/2026/", "tipo": "prensa", "cita_a": "SERTRACEN / VMT" },
+        { "titulo": "Renovar licencia y tarjeta en linea (elsalvador.com)", "url": "https://www.elsalvador.com/?p=1272936", "tipo": "prensa", "cita_a": "VMT" },
+        { "titulo": "Revision tecnica para volquetas (elsalvador.com)", "url": "https://www.elsalvador.com/?p=1296839", "tipo": "prensa", "cita_a": "VMT" }
+      ],
+      "estado_verificacion": "Requisitos y pasos tomados de prensa. COSTO PENDIENTE de verificar en SERTRACEN."
+    }
+  ]
+}
