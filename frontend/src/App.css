@@ -1056,6 +1056,70 @@ footer p {
   text-decoration: none;
 }
 
+.guide-schedule {
+  padding: 18px;
+  margin-bottom: 22px;
+  background: linear-gradient(135deg, #eff6ff, #f8fbff);
+  border: 1px solid #dbeafe;
+  border-radius: 14px;
+}
+
+.guide-schedule h4 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  color: #1e3a8a;
+  font-size: 15px;
+}
+
+.schedule-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.schedule-row {
+  padding: 10px 12px;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+}
+
+.schedule-row strong {
+  display: block;
+  margin-bottom: 3px;
+  color: #172033;
+  font-size: 12.5px;
+}
+
+.schedule-row p {
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.schedule-row.featured {
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+}
+
+.schedule-row.featured strong {
+  color: #15803d;
+}
+
+.schedule-row.featured p {
+  color: #3f6212;
+}
+
+.schedule-note {
+  margin-top: 10px;
+  color: #64748b;
+  font-size: 11.5px;
+  font-style: italic;
+  line-height: 1.5;
+}
+
 .guide-requirements h4 {
   margin-bottom: 10px;
   color: #172033;
@@ -1171,6 +1235,26 @@ footer p {
   line-height: 1.5;
 }
 
+.center-schedule {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 7px 9px;
+  background: #eff6ff;
+  border-radius: 8px;
+  color: #1d4ed8;
+  font-size: 11.5px;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.center-schedule span:first-child {
+  flex-shrink: 0;
+  font-size: 12px;
+  line-height: 1.3;
+}
+
 .center-card small {
   display: block;
   margin-top: 6px;
@@ -1231,4 +1315,63 @@ footer p {
   .centers-grid {
     grid-template-columns: 1fr;
   }
+}
+
+/* Acento visual para DUI (RNPN y DUICentros) */
+
+.guide-dui .guide-tab.active {
+  border-color: #16845b;
+  background: #16845b;
+  box-shadow: 0 8px 20px rgba(22, 132, 91, 0.24);
+}
+
+.guide-dui .guide-icon {
+  background: #e8f5ed;
+}
+
+.guide-dui .primary-button {
+  background: #16845b;
+}
+
+.guide-dui .guide-info,
+.guide-dui .centers {
+  border-color: #cde8d8;
+}
+
+.guide-dui .guide-schedule {
+  background: linear-gradient(135deg, #ecfdf5, #f7fdf9);
+  border-color: #bbf7d0;
+}
+
+.guide-dui .guide-schedule h4 {
+  color: #166534;
+}
+
+.guide-dui .center-schedule {
+  background: #ecfdf5;
+  color: #047857;
+}
+
+.guide-dui .centers-region h4 {
+  border-bottom-color: #bbf7d0;
+  color: #16845b;
+}
+
+.guide-dui .centers-region h4 span {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.center-card {
+  transition: 0.2s;
+}
+
+.center-card:hover {
+  border-color: #bfdbfe;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.07);
+  transform: translateY(-1px);
+}
+
+.guide-dui .center-card:hover {
+  border-color: #a7e3c3;
 }
