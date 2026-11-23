@@ -3,6 +3,7 @@ import './App.css'
 import { useEffect, useState } from 'react'
 import Dashboard from './components/Dashboard'
 import Calendario from './components/Calendario'
+import GuiaTramites from './components/GuiaTramites'
 
 const API = 'http://localhost:3003'
 
@@ -254,7 +255,8 @@ function App() {
         <nav>
           <a href="#inicio">Inicio</a>
           <a href="#documentos">Mis documentos</a>
-          <a href="#tramites">Trámites</a>
+          <a href="#tramites">Guía de trámites</a>
+          <a href="#centros">Centros de atención</a>
         </nav>
         {usuario ? (
           <div>
@@ -567,7 +569,9 @@ function App() {
           )}
         </section>
 
-        <section className="features" id="tramites">
+        <GuiaTramites />
+
+        <section className="features" id="beneficios">
           <div className="feature">
             <span>🔔</span>
             <h3>Recordatorios automáticos</h3>
