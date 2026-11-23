@@ -8,10 +8,14 @@ import './DocumentosSection.css';
 
 interface DocumentosSectionProps {
   onDocumentosChange?: (documentos: Documento[]) => void;
+  abrirFormularioTrigger?: number;
+  visible?: boolean;
 }
 
 export const DocumentosSection: React.FC<DocumentosSectionProps> = ({
   onDocumentosChange,
+  abrirFormularioTrigger = 0,
+  visible = false,
 }) => {
   const [documentos, setDocumentos] = useState<Documento[]>([]);
   const [cargando, setCargando] = useState<boolean>(true);
@@ -37,7 +41,7 @@ export const DocumentosSection: React.FC<DocumentosSectionProps> = ({
       setErrorGeneral(
         err instanceof Error
           ? err.message
-          : 'Error al cargar tus documentos.'
+          : 'Error al cargar tus documentos desde la API.'
       );
     } finally {
       setCargando(false);
@@ -47,6 +51,13 @@ export const DocumentosSection: React.FC<DocumentosSectionProps> = ({
   useEffect(() => {
     cargarDocumentos();
   }, []);
+
+  useEffect(() => {
+    if (abrirFormularioTrigger > 0) {
+      setDocumentoEnEdicion(null);
+      setMostrarFormulario(true);
+    }
+  }, [abrirFormularioTrigger]);
 
   const handleAbrirNuevo = () => {
     setDocumentoEnEdicion(null);
@@ -60,6 +71,7 @@ export const DocumentosSection: React.FC<DocumentosSectionProps> = ({
 
   const handleGuardar = async (payload: DocumentoPayload, id?: number) => {
     setGuardando(true);
+    setErrorGeneral('');
     try {
       if (id) {
         await documentosService.actualizar(id, payload);
@@ -77,6 +89,7 @@ export const DocumentosSection: React.FC<DocumentosSectionProps> = ({
   const handleConfirmarEliminar = async () => {
     if (!documentoAEliminar) return;
     setEliminando(true);
+    setErrorGeneral('');
     try {
       await documentosService.eliminar(documentoAEliminar.id);
       setDocumentoAEliminar(null);
@@ -93,20 +106,62 @@ export const DocumentosSection: React.FC<DocumentosSectionProps> = ({
     }
   };
 
+  if (!visible && !mostrarFormulario && documentos.length === 0) {
+    return null;
+  }
+
   return (
     <section className="tsv-docs-section" aria-label="Mis documentos">
       <div className="tsv-docs-header">
-        <h2>Mis Documentos Registrados</h2>
+        <div>
+          <h2>JUAN – Tarjetas de documentos y formularios</h2>
+          <p className="tsv-docs-subtitle-top">
+            Administra DUI, Pasaporte, Licencia de conducir y Tarjeta de
+            circulación con anticipación de 7, 14, 21 y 30 días.
+          </p>
+        </div>
         {!mostrarFormulario && (
           <button
             type="button"
             className="tsv-btn-primary"
             onClick={handleAbrirNuevo}
           >
-            + Nuevo documento
+            + Registrar documento
           </button>
         )}
       </div>
+
+      <details className="tsv-role-spec">
+        <summary>Ver alcance y tareas de JUAN (CRUD y formulario)</summary>
+        <div className="tsv-role-spec-grid">
+          <div>
+            <strong>A. Tarjetas de documentos</strong>
+            <ul>
+              <li>DUI, Pasaporte, Licencia de conducir y Tarjeta de circulación.</li>
+              <li>Muestra tipo, fecha de vencimiento, días restantes, estado y anticipación.</li>
+            </ul>
+          </div>
+          <div>
+            <strong>B. Formularios</strong>
+            <ul>
+              <li>Registrar y editar documentos con validaciones de campos.</li>
+              <li>Anticipación seleccionable: 7, 14, 21 y 30 días.</li>
+            </ul>
+          </div>
+          <div>
+            <strong>C. Acciones</strong>
+            <ul>
+              <li>Visualizar, editar y eliminar documentos con confirmación previa.</li>
+            </ul>
+          </div>
+          <div>
+            <strong>D. Conexión con el backend</strong>
+            <ul>
+              <li>Conectado a la API CRUD existente con token JWT.</li>
+            </ul>
+          </div>
+        </div>
+      </details>
 
       {mostrarFormulario && (
         <DocumentoFormCard
@@ -125,7 +180,10 @@ export const DocumentosSection: React.FC<DocumentosSectionProps> = ({
       {cargando ? (
         <p>Cargando documentos...</p>
       ) : documentos.length === 0 ? (
-        <p>Aún no tienes documentos registrados. Agrega tu primer documento.</p>
+        <p>
+          Aún no tienes documentos registrados. Usa &ldquo;+ Registrar
+          documento&rdquo; para crear el primero.
+        </p>
       ) : (
         <div className="tsv-cards-grid">
           {documentos.map((doc) => (

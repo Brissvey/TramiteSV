@@ -19,6 +19,40 @@
   font-size: 1.35rem;
 }
 
+.tsv-docs-subtitle-top {
+  margin: 0.25rem 0 0;
+  color: #475569;
+  font-size: 0.9rem;
+}
+
+.tsv-role-spec {
+  background: #f0f7ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+}
+
+.tsv-role-spec summary {
+  cursor: pointer;
+  font-weight: 700;
+  color: #0f294a;
+  font-size: 0.92rem;
+}
+
+.tsv-role-spec-grid {
+  margin-top: 0.75rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  font-size: 0.86rem;
+  color: #1e3a5f;
+}
+
+.tsv-role-spec-grid ul {
+  margin: 0.35rem 0 0;
+  padding-left: 1.1rem;
+}
+
 .tsv-btn-primary {
   background-color: #1d4ed8;
   color: #ffffff;
