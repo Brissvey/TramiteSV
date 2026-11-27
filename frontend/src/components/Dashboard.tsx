@@ -1,5 +1,16 @@
 
-type Documento = {
+import {
+    CalendarDays,
+    FileText,
+    Clock3,
+    AlertTriangle,
+    CheckCircle2,
+    Plus,
+    ArrowRight,
+    ShieldCheck,
+  } from 'lucide-react'
+  
+  type Documento = {
     id: number
     tipo: string
     fecha_vencimiento: string
@@ -51,20 +62,23 @@ type Documento = {
           <div>
             <span className="dashboard-label">PANEL PRINCIPAL</span>
             <h2>¡Bienvenido, {nombre}!</h2>
-            <p>Este es el resumen del estado de tus documentos.</p>
+            <p>Consulta y administra el estado de tus documentos.</p>
           </div>
   
           <button
-            className="primary-button"
+            className="primary-button dashboard-add-button"
             onClick={onAgregarDocumento}
           >
-            + Agregar documento
+            <Plus size={19} />
+            Agregar documento
           </button>
         </div>
   
         <div className="dashboard-stats">
           <article className="stat-card">
-            <span className="stat-icon">📁</span>
+            <div className="stat-icon stat-icon-blue">
+              <FileText size={23} />
+            </div>
             <div>
               <p>Total de documentos</p>
               <h3>{documentos.length}</h3>
@@ -72,7 +86,9 @@ type Documento = {
           </article>
   
           <article className="stat-card stat-warning">
-            <span className="stat-icon">⏳</span>
+            <div className="stat-icon stat-icon-yellow">
+              <Clock3 size={23} />
+            </div>
             <div>
               <p>Próximos a vencer</p>
               <h3>{proximos.length}</h3>
@@ -80,65 +96,86 @@ type Documento = {
           </article>
   
           <article className="stat-card stat-danger">
-            <span className="stat-icon">⚠️</span>
+            <div className="stat-icon stat-icon-red">
+              <AlertTriangle size={23} />
+            </div>
             <div>
               <p>Documentos vencidos</p>
               <h3>{vencidos.length}</h3>
             </div>
-        </article>
-
-        <article className="stat-card stat-success">
-            <span className="stat-icon">✓</span>
-            <div>
-            <p>Documentos vigentes</p>
-            <h3>{vigentes}</h3>
+          </article>
+  
+          <article className="stat-card stat-success">
+            <div className="stat-icon stat-icon-cyan">
+              <CheckCircle2 size={23} />
             </div>
-        </article>
-        </div>
-
-        <div className="dashboard-bottom">
-        <article className="dashboard-panel">
-            <h3>Estado de tus documentos</h3>
-            <p>
-            {documentos.length === 0
-                ? 'Todavía no tienes documentos registrados.'
-                : 'Mantén tus documentos actualizados y evita vencimientos.'}
-            </p>
-            <div className="status-list">
             <div>
+              <p>Documentos vigentes</p>
+              <h3>{vigentes}</h3>
+            </div>
+          </article>
+        </div>
+  
+        <div className="dashboard-bottom">
+          <article className="dashboard-panel">
+            <div className="panel-heading">
+              <div className="panel-heading-icon">
+                <ShieldCheck size={21} />
+              </div>
+              <h3>Estado de tus documentos</h3>
+            </div>
+  
+            <p>
+              {documentos.length === 0
+                ? 'Todavía no tienes documentos registrados.'
+                : 'Consulta el estado actual de tus documentos registrados.'}
+            </p>
+  
+            <div className="status-list">
+              <div>
                 <span className="status-dot dot-success" />
                 Vigentes
                 <strong>{vigentes}</strong>
-            </div>
-            <div>
+              </div>
+  
+              <div>
                 <span className="status-dot dot-warning" />
                 Próximos a vencer
                 <strong>{proximos.length}</strong>
-            </div>
-            <div>
+              </div>
+  
+              <div>
                 <span className="status-dot dot-danger" />
                 Vencidos
                 <strong>{vencidos.length}</strong>
+              </div>
             </div>
+          </article>
+  
+          <article className="dashboard-panel calendar-shortcut">
+            <div className="shortcut-icon">
+              <CalendarDays size={25} />
             </div>
-        </article>
-        <article className="dashboard-panel calendar-shortcut">
-            <span className="shortcut-icon">📅</span>
+  
             <h3>Calendario de vencimientos</h3>
+  
             <p>
-            Consulta las fechas de vencimiento de todos tus documentos
-            en un solo lugar.
+              Organiza tus fechas y consulta cuándo debes renovar tus
+              documentos.
             </p>
+  
             <button
-            className="secondary-button"
-            onClick={onVerCalendario}
+              className="secondary-button"
+              onClick={onVerCalendario}
             >
-            Abrir calendario →
+              Abrir calendario
+              <ArrowRight size={17} />
             </button>
-        </article>
+          </article>
         </div>
-    </section>
+      </section>
     )
-}
-
-export default Dashboard
+  }
+  
+  export default Dashboard
+  

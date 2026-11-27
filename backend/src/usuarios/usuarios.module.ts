@@ -1,5 +1,4 @@
 
-
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
@@ -7,9 +6,11 @@ import { ConfigService } from '@nestjs/config';
 import { UsuariosController } from './usuarios.controller';
 import { UsuariosService } from './usuarios.service';
 import { DatabaseService } from '../database/database.service';
+import { CorreoModule } from '../correo/correo.module';
 
 @Module({
   imports: [
+    CorreoModule,
     JwtModule.registerAsync({
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
