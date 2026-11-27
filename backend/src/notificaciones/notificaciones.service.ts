@@ -52,6 +52,47 @@ export class NotificacionesService {
       },
     });
   }
+  private obtenerRequisitos(tipo: string): string[] {
+    const tipoNormalizado = tipo
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .trim();
+
+    if (tipoNormalizado.includes('dui')) {
+      return [
+        'Presentar el DUI anterior.',
+        'Realizar el pago correspondiente de $10.31.',
+      ];
+    }
+
+    if (tipoNormalizado.includes('pasaporte')) {
+      return [
+        'Presentar DUI original vigente.',
+        'Presentar el pasaporte anterior, aunque esté vencido o próximo a vencer.',
+        'Presentar comprobante de pago de $25.00, realizado en caja o en línea.',
+      ];
+    }
+
+    if (tipoNormalizado.includes('licencia')) {
+      return [
+        'Presentar licencia anterior original.',
+        'Presentar DUI original vigente.',
+        'Aprobar el examen visual.',
+        'No tener multas de tránsito pendientes.',
+      ];
+    }
+
+    if (tipoNormalizado.includes('circulacion')) {
+      return [
+        'Presentar tarjeta de circulación anterior.',
+        'Presentar DUI original vigente de la persona que realiza el trámite.',
+        'No tener multas pendientes.',
+      ];
+    }
+
+    return [];
+  }
 
   @OnEvent('DOCUMENTO_REGISTRADO')
   async alRegistrarDocumento(evento: DocumentoRegistradoEvent) {
@@ -226,6 +267,31 @@ export class NotificacionesService {
       let colorTexto = '#166534';
       let enlace = 'https://dui.sv/inicio/';
       let textoEnlace = 'Consultar portal oficial';
+      const requisitos =
+        tipoRecordatorio === 'VENCIMIENTO'
+          ? this.obtenerRequisitos(documento.tipo)
+          : [];
+
+      const htmlRequisitos = requisitos.length
+        ? `
+          <div style="margin:24px 0;padding:18px;background-color:#f8fafc;border-radius:8px;">
+            <h3 style="margin:0 0 12px;color:#123b32;font-size:17px;">
+              Requisitos para la renovación
+            </h3>
+            <ul style="margin:0;padding-left:22px;">
+              ${requisitos.map((requisito) => `
+                <li style="margin-bottom:8px;font-size:14px;line-height:1.6;">
+                  ${requisito}
+                </li>
+              `).join('')}
+            </ul>
+          </div>
+        `
+        : '';
+
+      const htmlInformacion = requisitos.length > 0
+        ? `<p style="font-size:14px;line-height:1.7;margin:24px 0;">Consulta las ubicaciones y los detalles del trámite directamente en la aplicación TrámiteSV.</p>`
+        : `<p style="font-size:14px;line-height:1.7;margin:24px 0;">Para obtener información actualizada, consulta directamente con la institución correspondiente.</p>`;
 
       if (tipoRecordatorio === 'CORTE') {
         asunto = 'TrámiteSV | Mañana es el corte de tu tarjeta';
@@ -270,9 +336,18 @@ export class NotificacionesService {
           asunto = 'TrámiteSV | Tu DUI está próximo a vencer';
           titulo = 'Tu DUI está próximo a vencer';
           descripcion =
-            'Mantén tu Documento Único de Identidad al día. Consulta la información oficial para conocer los pasos que debes seguir.';
+            'Mantén tu Documento Único de Identidad al día. Consulta los requisitos para realizar la renovación.';
           enlace = 'https://dui.sv/inicio/';
           textoEnlace = 'Consultar portal oficial del DUI';
+        } else if (tipoNormalizado.includes('licencia')) {
+          enlace = 'https://portal.sertracen.com.sv/refrenda_licencia/';
+          textoEnlace = 'Consultar refrenda de licencia';
+        } else if (tipoNormalizado.includes('circulacion')) {
+          enlace = 'https://portal.sertracen.com.sv/refrenda_tarjeta/';
+          textoEnlace = 'Consultar refrenda de tarjeta';
+        } else if (tipoNormalizado.includes('pasaporte')) {
+          enlace = '';
+          textoEnlace = '';
         }
 
         if (documento.dias_restantes === 1) {
@@ -318,17 +393,18 @@ export class NotificacionesService {
                       <p style="margin:0;color:${colorTexto};font-size:24px;font-weight:bold;">${documento.dias_restantes} día(s)</p>
                     </td></tr>
                   </table>
-                  <p style="font-size:14px;line-height:1.7;margin:24px 0;">
-                    Para obtener información actualizada, consulta directamente con la institución correspondiente.
-                  </p>
-                  <table role="presentation" cellspacing="0" cellpadding="0" style="margin:0 auto 20px;">
-                    <tr><td align="center" style="background-color:#166534;border-radius:6px;">
-                      <a href="${enlace}" target="_blank"
-                        style="display:inline-block;padding:14px 22px;color:#ffffff;text-decoration:none;font-size:14px;font-weight:bold;">
-                        ${textoEnlace}
-                      </a>
-                    </td></tr>
-                  </table>
+                  ${htmlRequisitos}
+                  ${htmlInformacion}
+                  ${enlace ? `
+                    <table role="presentation" cellspacing="0" cellpadding="0" style="margin:0 auto 20px;">
+                      <tr><td align="center" style="background-color:#166534;border-radius:6px;">
+                        <a href="${enlace}" target="_blank"
+                          style="display:inline-block;padding:14px 22px;color:#ffffff;text-decoration:none;font-size:14px;font-weight:bold;">
+                          ${textoEnlace}
+                        </a>
+                      </td></tr>
+                    </table>
+                  ` : ''}
                   <p style="font-size:12px;line-height:1.6;color:#64748b;margin:24px 0 0;">
                     Verifica los requisitos y condiciones directamente con la institución oficial, ya que pueden cambiar.
                   </p>
@@ -352,7 +428,16 @@ export class NotificacionesService {
         `${etiquetaDias}: ${documento.dias_restantes}`,
         '',
         descripcion,
-        `Información: ${enlace}`,
+        ...(requisitos.length > 0
+          ? [
+              '',
+              'REQUISITOS PARA LA RENOVACIÓN:',
+              ...requisitos.map((requisito) => `- ${requisito}`),
+              '',
+              'Consulta las ubicaciones y los detalles del trámite en la aplicación TrámiteSV.',
+              ...(enlace ? [`Información oficial: ${enlace}`] : []),
+            ]
+          : [`Información: ${enlace}`]),
         '',
         'Este es un mensaje automático de TrámiteSV.',
       ].join('\n');

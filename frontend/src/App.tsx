@@ -1,4 +1,4 @@
-
+import RequisitosTramites from "./components/RequisitosTramites";
 import './App.css'
 import { useEffect, useState, type FormEvent } from 'react'
 
@@ -8,7 +8,6 @@ import {
   CarFront,
   CheckCircle2,
   ChevronRight,
-  Clock3,
   CreditCard,
   FileText,
   ExternalLink,
@@ -99,12 +98,20 @@ function formatearFechaDocumento(fecha: string, tipo: string) {
 }
 
 function App() {
+  const tokenRecuperacion = new URLSearchParams(
+    window.location.search,
+  ).get('token');
   const [estadoBackend, setEstadoBackend] = useState('Conectando...')
   const [mostrarAuth, setMostrarAuth] = useState(false)
   const [modoRegistro, setModoRegistro] = useState(false)
   const [nombre, setNombre] = useState('')
   const [correo, setCorreo] = useState('')
   const [password, setPassword] = useState('')
+  const [modoRecuperacion, setModoRecuperacion] = useState(
+    tokenRecuperacion ? 'restablecer' : 'ninguno'
+  )
+  const [nuevaPassword, setNuevaPassword] = useState('')
+  const [confirmarPassword, setConfirmarPassword] = useState('')
   const [usuario, setUsuario] = useState<Usuario | null>(null)
   const [mensaje, setMensaje] = useState('')
   const [cargando, setCargando] = useState(false)
@@ -214,6 +221,99 @@ function App() {
       setCargando(false)
     }
   }
+
+async function restablecerPassword(e: FormEvent<HTMLFormElement>) {
+  e.preventDefault();
+  setMensaje('');
+
+  if (!tokenRecuperacion) {
+    setMensaje('El enlace de recuperación no es válido.');
+    return;
+  }
+
+  if (nuevaPassword !== confirmarPassword) {
+    setMensaje('Las contraseñas no coinciden.');
+    return;
+  }
+
+  setCargando(true);
+
+  try {
+    const respuesta = await fetch(
+      `${API}/api/usuarios/restablecer-password`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          token: tokenRecuperacion,
+          nuevaPassword,
+        }),
+      },
+    );
+
+    const resultado = await respuesta.json();
+
+    if (!respuesta.ok) {
+      throw new Error(
+        Array.isArray(resultado.message)
+          ? resultado.message.join(', ')
+          : resultado.message || 'No se pudo restablecer la contraseña.',
+      );
+    }
+
+    setMensaje('Contraseña actualizada correctamente. Ya puedes iniciar sesión.');
+    setNuevaPassword('');
+    setConfirmarPassword('');
+    setModoRecuperacion('ninguno');
+
+    window.history.replaceState({}, '', window.location.pathname);
+  } catch (error) {
+    setMensaje(
+      error instanceof Error
+        ? error.message
+        : 'Ocurrió un error inesperado.',
+    );
+  } finally {
+    setCargando(false);
+  }
+}
+
+async function solicitarRecuperacion(e: FormEvent<HTMLFormElement>) {
+  e.preventDefault();
+  setMensaje('');
+  setCargando(true);
+
+  try {
+    const respuesta = await fetch(`${API}/api/usuarios/recuperar-password`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ correo }),
+    });
+
+    const resultado = await respuesta.json();
+
+    if (!respuesta.ok) {
+      throw new Error(resultado.message || 'No se pudo enviar la solicitud.');
+    }
+
+    setMensaje(
+      resultado.mensaje ||
+      'Si el correo está registrado, recibirás un enlace para recuperar tu contraseña.',
+    );
+  } catch (error) {
+    setMensaje(
+      error instanceof Error
+        ? error.message
+        : 'Ocurrió un error inesperado.',
+    );
+  } finally {
+    setCargando(false);
+  }
+}
 
   async function cargarDocumentos(token?: string) {
     const accessToken = token || localStorage.getItem('tramitesv_token')
@@ -705,8 +805,126 @@ async function eliminarDocumento(id: number, tipo: string) {
           )}
         </section>
 
+{modoRecuperacion === 'restablecer' && (
+  <div className="auth-overlay">
+    <section className="auth-modal" role="dialog" aria-modal="true">
+      <div className="section-title">
+        <span>SEGURIDAD DE CUENTA</span>
+        <h2>Crear nueva contraseña</h2>
+        <p>Ingresa tu nueva contraseña para recuperar el acceso a TrámiteSV.</p>
+      </div>
+
+      <form className="auth-form" onSubmit={restablecerPassword}>
+        <label>
+          Nueva contraseña
+          <span className="input-icon">
+            <LockKeyhole size={17} />
+            <input
+              type="password"
+              value={nuevaPassword}
+              onChange={(e) => setNuevaPassword(e.target.value)}
+              minLength={8}
+              maxLength={72}
+              autoComplete="new-password"
+              placeholder="Mínimo 8 caracteres"
+              required
+            />
+          </span>
+        </label>
+
+        <label>
+          Confirmar nueva contraseña
+          <span className="input-icon">
+            <LockKeyhole size={17} />
+            <input
+              type="password"
+              value={confirmarPassword}
+              onChange={(e) => setConfirmarPassword(e.target.value)}
+              minLength={8}
+              maxLength={72}
+              autoComplete="new-password"
+              placeholder="Repite tu contraseña"
+              required
+            />
+          </span>
+        </label>
+
+        {mensaje && (
+          <p className="auth-message" role="alert">
+            {mensaje}
+          </p>
+        )}
+
+        <button
+          className="primary-button"
+          type="submit"
+          disabled={cargando}
+        >
+          {cargando ? 'Actualizando...' : 'Guardar nueva contraseña'}
+          {!cargando && <ChevronRight size={18} />}
+        </button>
+      </form>
+    </section>
+  </div>
+)}
+
+{modoRecuperacion === 'solicitar' && (
+  <div className="auth-overlay">
+    <section className="auth-modal" role="dialog" aria-modal="true">
+      <div className="section-title">
+        <span>RECUPERAR CUENTA</span>
+        <h2>¿Olvidaste tu contraseña?</h2>
+        <p>Ingresa tu correo y te enviaremos un enlace para crear una nueva contraseña.</p>
+      </div>
+
+      <form className="auth-form" onSubmit={solicitarRecuperacion}>
+        <label>
+          Correo electrónico
+          <span className="input-icon">
+            <Mail size={17} />
+            <input
+              type="email"
+              value={correo}
+              onChange={(e) => setCorreo(e.target.value)}
+              placeholder="tu@correo.com"
+              autoComplete="email"
+              required
+            />
+          </span>
+        </label>
+
+        {mensaje && (
+          <p className="auth-message" role="alert">
+            {mensaje}
+          </p>
+        )}
+
+        <button
+          className="primary-button"
+          type="submit"
+          disabled={cargando}
+        >
+          {cargando ? 'Enviando...' : 'Enviar enlace de recuperación'}
+          {!cargando && <ChevronRight size={18} />}
+        </button>
+
+        <button
+          type="button"
+          className="secondary-button"
+          onClick={() => {
+            setModoRecuperacion('ninguno');
+            setMensaje('');
+          }}
+        >
+          Volver al inicio de sesión
+        </button>
+      </form>
+    </section>
+  </div>
+)}
+
         {/* FORMULARIO DE AUTENTICACIÓN */}
-        {mostrarAuth && (
+        {mostrarAuth && modoRecuperacion !== 'solicitar' && (
           <div
             className="auth-overlay"
             onClick={(e) => {
@@ -789,6 +1007,19 @@ async function eliminarDocumento(id: number, tipo: string) {
                     />
                   </span>
                 </label>
+
+                {!modoRegistro && (
+                  <button
+                    type="button"
+                    className="secondary-button"
+                    onClick={() => {
+                      setModoRecuperacion('solicitar');
+                      setMensaje('');
+                    }}
+                  >
+                    ¿Olvidaste tu contraseña?
+                  </button>
+                )}
 
                 {mensaje && (
                   <p className="auth-message" role="alert">
@@ -1230,6 +1461,7 @@ async function eliminarDocumento(id: number, tipo: string) {
 
         {/* CENTROS DE ATENCIÓN */}
         <CentrosAtencion />
+        <RequisitosTramites />
 
 
         {/* SITIOS OFICIALES */}

@@ -195,17 +195,10 @@ export default function CentrosAtencion() {
                     {centro.institucion}
                   </span>
 
-                  {centro.verificado_oficial ? (
-                    <span className="centro-status verified">
-                      <ShieldCheck size={14} />
-                      Verificado oficialmente
-                    </span>
-                  ) : (
-                    <span className="centro-status pending">
-                      <AlertCircle size={14} />
-                      Por confirmar
-                    </span>
-                  )}
+                  <span className="centro-status verified">
+                    <ShieldCheck size={14} />
+                    Verificado oficialmente
+                  </span>
                 </div>
 
                 <h3>{centro.nombre}</h3>
@@ -268,16 +261,7 @@ export default function CentrosAtencion() {
           </div>
         )}
 
-        <div className="centros-notice">
-          <AlertCircle size={19} />
-          <p>
-            <strong>Importante:</strong> los datos proceden del registro de
-            centros del proyecto. El estado de cada sede indica si cuenta
-            con verificación oficial. Cuando un dato no está disponible,
-            se muestra como pendiente de confirmación. Verifica la
-            información antes de visitar una sede.
-          </p>
-        </div>
+
       </div>
 
       <style>{`
@@ -549,28 +533,6 @@ export default function CentrosAtencion() {
           color: #24435f;
         }
 
-        .centros-notice {
-          display: flex;
-          gap: 12px;
-          align-items: flex-start;
-          margin-top: 25px;
-          padding: 17px;
-          background: #fff8e9;
-          border: 1px solid #f5e6c6;
-          border-radius: 12px;
-          color: #866324;
-        }
-
-        .centros-notice svg {
-          flex-shrink: 0;
-          margin-top: 2px;
-        }
-
-        .centros-notice p {
-          margin: 0;
-          font-size: 13px;
-          line-height: 1.65;
-        }
 
         @media (max-width: 850px) {
           .centros-grid {
