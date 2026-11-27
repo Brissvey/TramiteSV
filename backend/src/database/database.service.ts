@@ -5,39 +5,44 @@ import mysql, { Pool } from 'mysql2/promise';
 
 @Injectable()
 export class DatabaseService implements OnModuleDestroy {
-private readonly pool: Pool;
+  private readonly pool: Pool;
 
-constructor(private readonly configService: ConfigService) {
+  constructor(private readonly configService: ConfigService) {
+    const dbHost = this.configService.get<string>('DB_HOST');
+
     this.pool = mysql.createPool({
-    host: this.configService.get<string>('DB_HOST'),
-    port: Number(this.configService.get<string>('DB_PORT') ?? 3306),
-    user: this.configService.get<string>('DB_USER'),
-    password: this.configService.get<string>('DB_PASSWORD'),
-    database: this.configService.get<string>('DB_NAME'),
-    waitForConnections: true,
-    connectionLimit: 10,
+      host: dbHost,
+      port: Number(this.configService.get<string>('DB_PORT') ?? 3306),
+      user: this.configService.get<string>('DB_USER'),
+      password: this.configService.get<string>('DB_PASSWORD'),
+      database: this.configService.get<string>('DB_NAME'),
+      ssl: dbHost === 'localhost' ? undefined : {
+        rejectUnauthorized: true,
+      },
+      waitForConnections: true,
+      connectionLimit: 10,
     });
-}
+  }
 
-getConnection() {
+  getConnection() {
     return this.pool.getConnection();
-}
+  }
 
-async probarConexion() {
+  async probarConexion() {
     const conexion = await this.pool.getConnection();
 
     try {
-    const [filas] = await conexion.query(
+      const [filas] = await conexion.query(
         'SELECT DATABASE() AS base, NOW() AS fecha',
-    );
+      );
 
-    return filas;
+      return filas;
     } finally {
-    conexion.release();
+      conexion.release();
     }
-}
+  }
 
-async onModuleDestroy() {
+  async onModuleDestroy() {
     await this.pool.end();
-}
+  }
 }
