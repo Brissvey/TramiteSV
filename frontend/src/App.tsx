@@ -29,8 +29,7 @@ import Calendario from './components/Calendario'
 import GuiaTramites from './components/GuiaTramites'
 import CentrosAtencion from './components/CentrosAtencion'
 
-const API = 'http://localhost:3003'
-
+const API = import.meta.env.VITE_API_URL || 'http://localhost:3003'
 type Usuario = {
   id: number
   nombre: string
