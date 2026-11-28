@@ -26,7 +26,6 @@ import {
 
 import Dashboard from './components/Dashboard'
 import Calendario from './components/Calendario'
-import GuiaTramites from './components/GuiaTramites'
 import CentrosAtencion from './components/CentrosAtencion'
 
 const API = import.meta.env.VITE_API_URL || 'http://localhost:3003'
@@ -552,7 +551,6 @@ async function eliminarDocumento(id: number, tipo: string) {
         <nav>
           <a href="#inicio">Inicio</a>
           <a href="#documentos">Mis documentos</a>
-          <a href="#tramites">Guía de trámites</a>
 <a href="#calendario">Calendario</a>
 <a href="#centros-atencion">Centros de atención</a>
 <a href="#sitios-oficiales">Sitios oficiales</a>
@@ -1539,8 +1537,6 @@ async function eliminarDocumento(id: number, tipo: string) {
             a las instituciones responsables de los trámites.
           </p>
         </section>
-
-        <GuiaTramites />
 
         <style>{`
           .official-sites {
