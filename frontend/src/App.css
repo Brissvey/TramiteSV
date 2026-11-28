@@ -1574,13 +1574,12 @@ footer p {
 }
 
 .guide-layout {
-  display: grid;
-  grid-template-columns: 360px minmax(0, 1fr);
-  gap: 24px;
-  align-items: start;
+  display: block;
 }
 
 .guide-info {
+  max-width: 920px;
+  margin: 0 auto;
   padding: 26px;
   background: white;
   border: 1px solid #e2e8f0;

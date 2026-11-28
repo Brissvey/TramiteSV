@@ -12,6 +12,7 @@ import {
   CreditCard,
   FileText,
   ChevronRight,
+  ExternalLink,
 } from 'lucide-react';
 
 import datosCentros from '../data/centros.json';
@@ -43,6 +44,7 @@ interface Centro {
   verificado_oficial: boolean;
   fuentes: string[];
   notas: string | null;
+  mapa: string | null;
 }
 
 const centros: Centro[] = datosCentros.centros as Centro[];
@@ -201,7 +203,21 @@ export default function CentrosAtencion() {
                   </span>
                 </div>
 
-                <h3>{centro.nombre}</h3>
+                <h3>
+                  {centro.mapa ? (
+                    <a
+                      href={centro.mapa}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title={`Abrir ${centro.nombre} en Google Maps`}
+                    >
+                      {centro.nombre}
+                      <ExternalLink size={14} aria-hidden="true" />
+                    </a>
+                  ) : (
+                    centro.nombre
+                  )}
+                </h3>
 
                 <span className="centro-departamento">
                   {centro.departamento ?? 'Departamento no especificado'},
@@ -476,6 +492,26 @@ export default function CentrosAtencion() {
           color: #183c5b;
           line-height: 1.4;
           margin: 0 0 5px;
+        }
+
+        .centro-card h3 a {
+          display: inline-flex;
+          align-items: center;
+          gap: 7px;
+          color: inherit;
+          text-decoration: none;
+        }
+
+        .centro-card h3 a svg {
+          flex-shrink: 0;
+          color: #1680ba;
+          opacity: .6;
+        }
+
+        .centro-card h3 a:hover {
+          color: #0879b9;
+          text-decoration: underline;
+          text-underline-offset: 3px;
         }
 
         .centro-departamento {

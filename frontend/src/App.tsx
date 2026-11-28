@@ -554,7 +554,7 @@ async function eliminarDocumento(id: number, tipo: string) {
           <a href="#documentos">Mis documentos</a>
           <a href="#tramites">Guía de trámites</a>
 <a href="#calendario">Calendario</a>
-<a href="#centros">Centros de atención</a>
+<a href="#centros-atencion">Centros de atención</a>
 <a href="#sitios-oficiales">Sitios oficiales</a>
         </nav>
 
